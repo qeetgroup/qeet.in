@@ -159,7 +159,7 @@ function SubmitButton() {
       type="submit"
       disabled={pending}
       className={cn(
-        "inline-flex h-12 items-center justify-center gap-2 rounded-full bg-ink px-7 font-sans text-body font-medium text-ink-inverse",
+        "inline-flex h-12 items-center justify-center gap-2 rounded-full bg-ink px-7 font-sans text-body font-medium text-canvas",
         "transition-opacity duration-200 hover:bg-ink/90 disabled:opacity-60 disabled:cursor-not-allowed",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
       )}

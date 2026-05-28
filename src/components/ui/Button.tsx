@@ -6,7 +6,7 @@ type Variant = "solid" | "outline" | "ghost";
 type Size = "md" | "lg";
 
 const variantMap: Record<Variant, string> = {
-  solid: "bg-ink text-ink-inverse hover:bg-ink/90",
+  solid: "bg-ink text-canvas hover:bg-ink/90",
   outline: "border border-rule-strong text-ink hover:bg-ink/5",
   ghost: "text-ink hover:bg-ink/5",
 };
