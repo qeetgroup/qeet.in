@@ -6,6 +6,7 @@ import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { organizationSchema, websiteSchema } from "@/lib/structured-data";
+import { CommandPaletteShell } from "@/components/sections/CommandPaletteShell";
 
 const serif = Instrument_Serif({
   subsets: ["latin"],
@@ -90,6 +91,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <CommandPaletteShell />
         {plausibleDomain && (
           <Script
             defer

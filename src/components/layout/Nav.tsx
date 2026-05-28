@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import NextLink from "next/link";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { COMMAND_PALETTE_OPEN_EVENT } from "@/components/sections/CommandPalette";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -84,7 +85,15 @@ export function Nav() {
               })}
             <NextLink
               href="/search"
-              aria-label="Search"
+              aria-label="Search (⌘K)"
+              title="Search (⌘K)"
+              onClick={(e) => {
+                // Cmd/Ctrl/Shift-click → let the browser navigate (new tab, etc.).
+                // Plain click → open the command palette instead.
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+                e.preventDefault();
+                window.dispatchEvent(new Event(COMMAND_PALETTE_OPEN_EVENT));
+              }}
               className="ml-2 inline-flex h-10 w-10 items-center justify-center text-ink-muted hover:text-ink transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink rounded-sm"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">

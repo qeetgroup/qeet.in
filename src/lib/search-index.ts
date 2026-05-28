@@ -1,0 +1,60 @@
+import "server-only";
+import { listCompanies, listMemos, listPosts } from "./content";
+import { STATIC_PAGES, type SearchEntry } from "./search";
+
+/**
+ * Server-only index builder. Reads MDX from disk (companies, newsroom,
+ * memos) and merges with the static-page seed. Kept apart from the
+ * client-safe utilities in lib/search.ts because that file is imported
+ * by client components and cannot transitively pull in node:fs.
+ */
+export async function buildSearchIndex(): Promise<SearchEntry[]> {
+  const [companies, posts, memos] = await Promise.all([
+    listCompanies(),
+    listPosts(),
+    listMemos(),
+  ]);
+
+  const entries: SearchEntry[] = [];
+
+  for (const p of STATIC_PAGES) {
+    entries.push({
+      ...p,
+      haystack: `${p.title} ${p.description}`.toLowerCase(),
+    });
+  }
+
+  for (const c of companies) {
+    entries.push({
+      type: "company",
+      title: c.data.name,
+      description: c.data.description,
+      url: `/companies/${c.slug}`,
+      haystack:
+        `${c.data.name} ${c.data.tagline} ${c.data.sector} ${c.data.description} ${c.content}`.toLowerCase(),
+    });
+  }
+
+  for (const p of posts) {
+    entries.push({
+      type: "post",
+      title: p.data.title.replace(/\.$/, ""),
+      description: p.data.dek,
+      url: `/newsroom/${p.slug}`,
+      haystack:
+        `${p.data.title} ${p.data.category} ${p.data.dek} ${p.content}`.toLowerCase(),
+    });
+  }
+
+  for (const m of memos) {
+    entries.push({
+      type: "memo",
+      title: m.data.title.replace(/\.$/, ""),
+      description: m.data.dek,
+      url: `/memos/${m.slug}`,
+      haystack: `${m.data.title} ${m.data.dek} ${m.content}`.toLowerCase(),
+    });
+  }
+
+  return entries;
+}

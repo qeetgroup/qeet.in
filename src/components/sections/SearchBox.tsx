@@ -3,24 +3,11 @@
 import { useMemo, useState } from "react";
 import NextLink from "next/link";
 import { cn } from "@/lib/utils";
-import type { SearchEntry } from "@/lib/search";
-
-const TYPE_LABEL: Record<SearchEntry["type"], string> = {
-  page: "Page",
-  company: "Company",
-  post: "Newsroom",
-  memo: "Memo",
-};
-
-function scoreEntry(entry: SearchEntry, q: string): number {
-  if (!q) return 0;
-  const title = entry.title.toLowerCase();
-  if (title.startsWith(q)) return 100;
-  if (title.includes(q)) return 60;
-  if (entry.description.toLowerCase().includes(q)) return 30;
-  if (entry.haystack.includes(q)) return 10;
-  return 0;
-}
+import {
+  SEARCH_TYPE_LABEL,
+  scoreEntry,
+  type SearchEntry,
+} from "@/lib/search";
 
 export function SearchBox({ index }: { index: SearchEntry[] }) {
   const [query, setQuery] = useState("");
@@ -71,7 +58,7 @@ export function SearchBox({ index }: { index: SearchEntry[] }) {
                 className="block py-6 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 focus-visible:ring-offset-canvas md:py-8"
               >
                 <p className="font-sans text-caption font-medium uppercase tracking-[0.14em] text-ink-subtle">
-                  {TYPE_LABEL[r.type]}
+                  {SEARCH_TYPE_LABEL[r.type]}
                 </p>
                 <h2 className="mt-2 font-serif font-normal text-balance text-ink text-[1.5rem] leading-[1.18] md:text-[1.75rem] md:leading-[1.16]">
                   {r.title}

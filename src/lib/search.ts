@@ -1,4 +1,9 @@
-import { listCompanies, listMemos, listPosts } from "./content";
+/**
+ * Client-safe search primitives — types, label map, scoring function, and
+ * the static-page seed list. No filesystem imports here. The server-only
+ * `buildSearchIndex()` lives in lib/search-index.ts so this file stays
+ * importable from client components (SearchBox, CommandPalette).
+ */
 
 export type SearchEntry = {
   type: "post" | "memo" | "company" | "page";
@@ -9,7 +14,36 @@ export type SearchEntry = {
   haystack: string;
 };
 
-const STATIC_PAGES: ReadonlyArray<Omit<SearchEntry, "haystack">> = [
+/**
+ * Visible label for each entry type in result rows. Centralised so the
+ * /search page and the ⌘K command palette stay in sync.
+ */
+export const SEARCH_TYPE_LABEL: Record<SearchEntry["type"], string> = {
+  page: "Page",
+  company: "Company",
+  post: "Newsroom",
+  memo: "Memo",
+};
+
+/**
+ * Score an entry against a lowercased query. Higher is better.
+ * - title.startsWith(q)  → 100  (best — likely the intent)
+ * - title.includes(q)    →  60
+ * - description match    →  30
+ * - body match           →  10
+ * - no match             →   0
+ */
+export function scoreEntry(entry: SearchEntry, q: string): number {
+  if (!q) return 0;
+  const title = entry.title.toLowerCase();
+  if (title.startsWith(q)) return 100;
+  if (title.includes(q)) return 60;
+  if (entry.description.toLowerCase().includes(q)) return 30;
+  if (entry.haystack.includes(q)) return 10;
+  return 0;
+}
+
+export const STATIC_PAGES: ReadonlyArray<Omit<SearchEntry, "haystack">> = [
   {
     type: "page",
     title: "About",
@@ -66,54 +100,3 @@ const STATIC_PAGES: ReadonlyArray<Omit<SearchEntry, "haystack">> = [
     url: "/now",
   },
 ];
-
-export async function buildSearchIndex(): Promise<SearchEntry[]> {
-  const [companies, posts, memos] = await Promise.all([
-    listCompanies(),
-    listPosts(),
-    listMemos(),
-  ]);
-
-  const entries: SearchEntry[] = [];
-
-  for (const p of STATIC_PAGES) {
-    entries.push({
-      ...p,
-      haystack: `${p.title} ${p.description}`.toLowerCase(),
-    });
-  }
-
-  for (const c of companies) {
-    entries.push({
-      type: "company",
-      title: c.data.name,
-      description: c.data.description,
-      url: `/companies/${c.slug}`,
-      haystack:
-        `${c.data.name} ${c.data.tagline} ${c.data.sector} ${c.data.description} ${c.content}`.toLowerCase(),
-    });
-  }
-
-  for (const p of posts) {
-    entries.push({
-      type: "post",
-      title: p.data.title.replace(/\.$/, ""),
-      description: p.data.dek,
-      url: `/newsroom/${p.slug}`,
-      haystack:
-        `${p.data.title} ${p.data.category} ${p.data.dek} ${p.content}`.toLowerCase(),
-    });
-  }
-
-  for (const m of memos) {
-    entries.push({
-      type: "memo",
-      title: m.data.title.replace(/\.$/, ""),
-      description: m.data.dek,
-      url: `/memos/${m.slug}`,
-      haystack: `${m.data.title} ${m.data.dek} ${m.content}`.toLowerCase(),
-    });
-  }
-
-  return entries;
-}
