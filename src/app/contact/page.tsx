@@ -25,7 +25,7 @@ const channels = [
   },
   {
     label: "General",
-    email: "hello@qeet.in",
+    email: "support@qeet.in",
     description: "Anything else.",
   },
 ];

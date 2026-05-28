@@ -55,8 +55,8 @@ export async function submitContact(
   try {
     const resend = new Resend(apiKey);
     await resend.emails.send({
-      from: process.env.CONTACT_FROM ?? "Qeet Group <hello@qeet.in>",
-      to: [process.env.CONTACT_TO ?? "hello@qeet.in"],
+      from: process.env.CONTACT_FROM ?? "Qeet Group <support@qeet.in>",
+      to: [process.env.CONTACT_TO ?? "support@qeet.in"],
       replyTo: email,
       subject: `[${topic}] Contact from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\nTopic: ${topic}\n\n${message}\n`,
@@ -68,7 +68,7 @@ export async function submitContact(
       status: "error",
       errors: {
         _global:
-          "Something went wrong sending your message. Try again, or email hello@qeet.in directly.",
+          "Something went wrong sending your message. Try again, or email support@qeet.in directly.",
       },
       values: { name, email, topic, message },
     };

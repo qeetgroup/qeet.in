@@ -24,7 +24,7 @@ const columns: FooterColumn[] = [
     items: [
       { href: "mailto:partnerships@qeet.in", label: "Partnerships" },
       { href: "mailto:press@qeet.in", label: "Press" },
-      { href: "mailto:hello@qeet.in", label: "General" },
+      { href: "mailto:support@qeet.in", label: "General" },
     ],
   },
 ];
