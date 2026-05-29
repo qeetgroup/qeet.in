@@ -73,6 +73,31 @@ const groups: FaqGroup[] = [
     ],
   },
   {
+    heading: "Qeet ID",
+    items: [
+      {
+        question: "What is Qeet ID?",
+        answer:
+          "Qeet ID is the first venture inside the Group — a developer-first authentication and authorization platform. It puts sign-in, multi-factor, multi-tenant access control, machine-to-machine auth, signed webhooks, and a hash-chained audit log on a single identity graph. The product, documentation, and pricing live at id.qeet.in.",
+      },
+      {
+        question: "What can it do today, and what's coming?",
+        answer:
+          "Available now: email/password with stateful sessions and refresh-token rotation, passwordless magic links, email and phone one-time codes, TOTP multi-factor with recovery codes, multi-tenant RBAC with a permission-check API, API keys and OAuth client-credentials for machine-to-machine, OpenID Connect discovery/JWKS/userinfo, HMAC-signed webhooks with retries and a dead-letter queue, and a hash-chained audit log. On the roadmap: passkeys, social sign-in, SAML 2.0, SCIM 2.0, OAuth authorization-code flow, and asymmetric token signing. The company page lists what's live versus what's next.",
+      },
+      {
+        question: "Does Qeet ID support enterprise SSO and directory provisioning?",
+        answer:
+          "OpenID Connect is supported today, so standards-based clients integrate now. SAML 2.0 (service provider and identity provider) and SCIM 2.0 directory provisioning are on the roadmap as the platform hardens toward 1.0. If enterprise SSO timing matters for your evaluation, write to partnerships@qeet.in.",
+      },
+      {
+        question: "How do I start, and is there a free tier?",
+        answer:
+          "Start at id.qeet.in — sign up, install, and you can stand up sign-in the same day. The free tier covers 5,000 monthly active users with no credit card required. Paid tiers are documented on the site.",
+      },
+    ],
+  },
+  {
     heading: "Working with us",
     items: [
       {
